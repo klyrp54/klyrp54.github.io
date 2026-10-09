@@ -34,6 +34,26 @@
   .group ul { margin:0; padding-left:18px; }
   .keep { color:#16a34a; }
   footer { margin-top:24px; color:var(--muted); font-size:.85rem; }
+
+  /* Cookie-Demo */
+  .banner { position:relative; background:var(--bg); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:16px; }
+  .banner p { margin:0 0 12px; font-size:.95rem; }
+  .btn.decline { background:transparent; color:var(--text); border:1px solid var(--border); }
+  .log { background:#0d1117; color:#c9d1d9; border-radius:10px; padding:14px; font-family:ui-monospace, Consolas, monospace; font-size:.85rem; min-height:60px; white-space:pre-wrap; }
+  .log .ok { color:#7ee787; }
+  .log .no { color:#ff7b72; }
+  table.cmp { width:100%; border-collapse:collapse; margin-top:12px; font-size:.9rem; }
+  table.cmp th, table.cmp td { text-align:left; padding:6px 8px; border-bottom:1px solid var(--border); }
+  table.cmp th { color:var(--muted); font-weight:600; }
+  .pill { display:inline-block; padding:2px 8px; border-radius:999px; font-size:.78rem; }
+  .pill.yes { background:#16a34a22; color:#16a34a; }
+  .pill.no { background:#6b728022; color:var(--muted); }
+
+  /* Mini-Game */
+  #gameWrap { display:flex; flex-direction:column; align-items:center; gap:10px; }
+  #gameCanvas { background:#0d1117; border-radius:10px; max-width:100%; touch-action:none; }
+  .scoreRow { display:flex; gap:18px; font-size:.95rem; color:var(--text); }
+  .scoreRow b { color:var(--accent); }
 </style>
 </head>
 <body>
@@ -45,6 +65,8 @@
     <button class="active" data-tab="tabOcr">Foto zu Text</button>
     <button data-tab="tabText">Text-Duplikate</button>
     <button data-tab="tabFiles">Datei-Duplikate</button>
+    <button data-tab="tabCookie">Cookie-Demo</button>
+    <button data-tab="tabGame">Rätsel</button>
   </nav>
 
   <section class="tab" id="tabOcr">
@@ -109,6 +131,60 @@
     <div class="status" id="fileInfo"></div>
     <div id="fileResult"></div>
     <p class="sub">Es werden Dateien mit identischem Inhalt gefunden, auch wenn sie anders heißen. Löschen musst du sie selbst, der Browser darf keine Dateien entfernen.</p>
+  </section>
+
+  <section class="tab" id="tabCookie" hidden>
+    <h2>Cookie-Demo: Was heißt "Akzeptieren" eigentlich?</h2>
+    <p class="sub">Schulprojekt-Demo. Alles passiert nur in deinem eigenen Browser, es wird nichts irgendwohin gesendet. Das Banner ist nachgestellt, wie es auf vielen echten Seiten aussieht.</p>
+
+    <div class="banner" id="cookieBanner">
+      <p>🍪 Diese Seite verwendet Cookies, um dir Inhalte anzuzeigen und dein Verhalten zu analysieren.</p>
+      <div class="row">
+        <button class="btn" id="btnAccept">Akzeptieren</button>
+        <button class="btn decline" id="btnDecline">Ablehnen</button>
+        <button class="btn secondary" id="btnReset">Zurücksetzen</button>
+      </div>
+    </div>
+
+    <div class="status" id="cookieStatus">Du hast noch nichts ausgewählt. Klicke auf "Akzeptieren" oder "Ablehnen".</div>
+    <div class="log" id="cookieLog">Warte auf deine Wahl …</div>
+
+    <table class="cmp" id="cmpTable" hidden>
+      <thead><tr><th>Information</th><th>Vorher</th><th>Nach deiner Wahl</th></tr></thead>
+      <tbody id="cmpBody"></tbody>
+    </table>
+
+    <details style="margin-top:16px">
+      <summary>Was bedeutet das rechtlich? (für die Präsentation)</summary>
+      <p>Ein Cookie-Banner ist keine technische Hürde, sondern eine <b>Einwilligung</b> nach DSGVO und ePrivacy-Richtlinie. Klickst du auf "Akzeptieren", erlaubst du der Seite, Cookies und ähnliche Technik zu nutzen, um dich über Besuche hinweg wiederzuerkennen und dein Verhalten auszuwerten, z. B. für Werbung.</p>
+      <p><b>Technisch notwendige Daten</b> (IP-Adresse beim Server, damit die Seite überhaupt antworten kann) fallen so oder so an und brauchen rechtlich keine Einwilligung. <b>Tracking- und Analyse-Cookies</b> dagegen dürfen laut Gesetz erst nach deiner Zustimmung gesetzt werden, zumindest in der EU.</p>
+      <p>In der Praxis sammeln viele Seiten direkt nach dem Klick zusätzliche Daten wie Bildschirmgröße, Spracheinstellung, welche Seiten du besuchst und wie lange. Einzeln wirkt das harmlos, zusammengenommen lässt sich daraus oft ein ziemlich genaues Profil bauen, deshalb braucht es die Einwilligung.</p>
+    </details>
+  </section>
+
+  <section class="tab" id="tabGame" hidden>
+    <h2>🍎 Löse das Rätsel, um das Mini-Game freizuschalten</h2>
+    <div id="riddleBox">
+      <p class="sub">Auf einem Apfelbaum wachsen die Äpfel in 4 Reihen: 6, 7, 6 und 7 Stück. Schreib die Anzahl pro Reihe einfach hintereinander als eine Zahl (nicht addieren).</p>
+      <label for="riddleIn">Deine Antwort</label>
+      <input type="text" id="riddleIn" inputmode="numeric" placeholder="????">
+      <div class="row"><button class="btn" id="riddleBtn">Prüfen</button></div>
+      <div class="status" id="riddleStatus"></div>
+    </div>
+
+    <div id="gameWrap" hidden>
+      <p class="sub">🎉 Richtig gelöst! Steuere das Quadrat mit den Pfeiltasten (oder A/D auf dem Handy per Tippen) und weiche den fallenden Blöcken aus.</p>
+      <canvas id="gameCanvas" width="360" height="480"></canvas>
+      <div class="scoreRow">
+        <span>Punkte: <b id="gameScore">0</b></span>
+        <span>Highscore: <b id="gameBest">0</b></span>
+      </div>
+      <div class="row">
+        <button class="btn" id="gameStart">Start</button>
+        <button class="btn secondary" id="gameLeft">◀</button>
+        <button class="btn secondary" id="gameRight">▶</button>
+      </div>
+    </div>
   </section>
 
   <footer>Texterkennung mit Tesseract.js (Open Source). Beim ersten Start lädt der Browser die Sprachdaten nach.</footer>
@@ -312,6 +388,221 @@ $("files").addEventListener("change", async e => {
     result.appendChild(box);
   });
 });
+
+// Cookie-Demo
+function cookieInfoBasic() {
+  return {
+    "Browser (User-Agent)": navigator.userAgent,
+    "Bildschirmgröße": screen.width + " × " + screen.height,
+    "Zeitzone": Intl.DateTimeFormat().resolvedOptions().timeZone,
+    "Sprache": navigator.language
+  };
+}
+function cookieInfoExtra() {
+  return {
+    "Besuchsverlauf dieser Demo": (localStorage.getItem("demoVisits") || "0") + " Aufrufe gespeichert",
+    "Eindeutige Kennung (Beispiel)": localStorage.getItem("demoId") || "wird jetzt vergeben",
+    "Mausbewegungen/Klicks": "könnten ab jetzt protokolliert werden",
+    "Verweildauer auf der Seite": "wird ab jetzt gemessen"
+  };
+}
+
+function renderCookieLog(lines, ok) {
+  const log = $("cookieLog");
+  log.innerHTML = lines.map(l => '<span class="' + (ok ? "ok" : "no") + '">' + (ok ? "✓ " : "— ") + l + "</span>").join("\n");
+}
+
+function renderCmpTable(accepted) {
+  const basic = cookieInfoBasic();
+  const extra = cookieInfoExtra();
+  const body = $("cmpBody");
+  body.innerHTML = "";
+  const addRow = (label, before, afterVal, afterOk) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = "<td>" + label + "</td><td>" + before + "</td><td>" +
+      '<span class="pill ' + (afterOk ? "yes" : "no") + '">' + afterVal + "</span></td>";
+    body.appendChild(tr);
+  };
+  addRow("Technische Basisdaten (Browser, Bildschirm, Zeitzone)", "immer sichtbar", "immer sichtbar", true);
+  addRow("Langfristige Wiedererkennung (Cookie-ID)", "nicht gesetzt", accepted ? "wird gesetzt" : "bleibt aus", accepted);
+  addRow("Verhalten auf der Seite messen", "nein", accepted ? "ja" : "nein", accepted);
+  addRow("Für Werbung weitergeben dürfen", "nein", accepted ? "ja (laut Einwilligung)" : "nein", accepted);
+  $("cmpTable").hidden = false;
+}
+
+function cookieChoice(accepted) {
+  $("cookieBanner").hidden = true;
+  const basic = cookieInfoBasic();
+  const lines = Object.entries(basic).map(([k, v]) => k + ": " + v);
+
+  if (accepted) {
+    let id = localStorage.getItem("demoId");
+    if (!id) { id = Math.random().toString(36).slice(2, 10); localStorage.setItem("demoId", id); }
+    const visits = (parseInt(localStorage.getItem("demoVisits") || "0", 10) + 1);
+    localStorage.setItem("demoVisits", String(visits));
+    const extra = cookieInfoExtra();
+    lines.push("--- ab jetzt zusätzlich möglich, weil du akzeptiert hast ---");
+    lines.push("Eindeutige Kennung: " + id);
+    lines.push("Gezählte Aufrufe dieser Demo: " + visits);
+    lines.push(extra["Mausbewegungen/Klicks"]);
+    lines.push(extra["Verweildauer auf der Seite"]);
+    $("cookieStatus").textContent = "Du hast akzeptiert. Die Seite darf dich jetzt wiedererkennen und dein Verhalten auswerten.";
+  } else {
+    lines.push("--- das Übrige bleibt aus, weil du abgelehnt hast ---");
+    lines.push("Keine Kennung, kein Verhalten-Tracking, keine Weitergabe für Werbung.");
+    $("cookieStatus").textContent = "Du hast abgelehnt. Nur die technisch unvermeidbaren Basisdaten sind weiter sichtbar.";
+  }
+  renderCookieLog(lines, accepted);
+  renderCmpTable(accepted);
+}
+
+$("btnAccept").addEventListener("click", () => cookieChoice(true));
+$("btnDecline").addEventListener("click", () => cookieChoice(false));
+$("btnReset").addEventListener("click", () => {
+  localStorage.removeItem("demoId");
+  localStorage.removeItem("demoVisits");
+  $("cookieBanner").hidden = false;
+  $("cookieStatus").textContent = "Zurückgesetzt. Du hast noch nichts ausgewählt.";
+  $("cookieLog").textContent = "Warte auf deine Wahl …";
+  $("cmpTable").hidden = true;
+});
+
+// Rätsel-Freischaltung fürs Mini-Game (gilt nur für diesen Seitenaufruf, wird nicht gespeichert)
+function checkRiddle() {
+  const val = $("riddleIn").value.trim();
+  if (val === "6767") {
+    $("riddleBox").hidden = true;
+    $("gameWrap").hidden = false;
+    $("riddleStatus").textContent = "";
+  } else {
+    $("riddleStatus").textContent = "Noch nicht richtig, versuch's nochmal.";
+  }
+}
+$("riddleBtn").addEventListener("click", checkRiddle);
+$("riddleIn").addEventListener("keydown", e => { if (e.key === "Enter") checkRiddle(); });
+
+// Mini-Game: Ausweich-Spiel
+(() => {
+  const canvas = $("gameCanvas");
+  const ctx = canvas.getContext("2d");
+  const W = canvas.width, H = canvas.height;
+  const player = { w: 34, h: 18, x: W / 2 - 17, y: H - 34, speed: 6 };
+  let blocks = [];
+  let running = false;
+  let score = 0;
+  let best = parseInt(localStorage.getItem("gameBest") || "0", 10);
+  let spawnTimer = 0;
+  let speedMul = 1;
+  let keys = { left: false, right: false };
+  let raf = null;
+
+  $("gameBest").textContent = best;
+
+  function reset() {
+    player.x = W / 2 - player.w / 2;
+    blocks = [];
+    score = 0;
+    spawnTimer = 0;
+    speedMul = 1;
+    $("gameScore").textContent = "0";
+  }
+
+  function spawnBlock() {
+    const w = 24 + Math.random() * 40;
+    blocks.push({ x: Math.random() * (W - w), y: -20, w, h: 20, vy: 2 + Math.random() * 1.5 });
+  }
+
+  function rectsOverlap(a, b) {
+    return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+  }
+
+  function step() {
+    if (!running) return;
+    // Bewegung
+    if (keys.left) player.x -= player.speed;
+    if (keys.right) player.x += player.speed;
+    player.x = Math.max(0, Math.min(W - player.w, player.x));
+
+    // Blöcke erzeugen
+    spawnTimer++;
+    const spawnEvery = Math.max(18, 40 - Math.floor(score / 5));
+    if (spawnTimer >= spawnEvery) { spawnTimer = 0; spawnBlock(); }
+
+    // Blöcke bewegen
+    speedMul = 1 + score / 100;
+    for (const b of blocks) b.y += b.vy * speedMul;
+    blocks = blocks.filter(b => b.y < H + 30);
+
+    // Kollision
+    for (const b of blocks) {
+      if (rectsOverlap(player, b)) { endGame(); return; }
+    }
+
+    score++;
+    $("gameScore").textContent = Math.floor(score / 6);
+
+    // Zeichnen
+    ctx.clearRect(0, 0, W, H);
+    ctx.fillStyle = "#1d9bf0";
+    ctx.fillRect(player.x, player.y, player.w, player.h);
+    ctx.fillStyle = "#ff7b72";
+    for (const b of blocks) ctx.fillRect(b.x, b.y, b.w, b.h);
+
+    raf = requestAnimationFrame(step);
+  }
+
+  function endGame() {
+    running = false;
+    if (raf) cancelAnimationFrame(raf);
+    const final = Math.floor(score / 6);
+    if (final > best) {
+      best = final;
+      localStorage.setItem("gameBest", String(best));
+      $("gameBest").textContent = best;
+    }
+    ctx.fillStyle = "rgba(0,0,0,.6)";
+    ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = "#fff";
+    ctx.font = "bold 22px system-ui";
+    ctx.textAlign = "center";
+    ctx.fillText("Game Over — " + final + " Punkte", W / 2, H / 2 - 10);
+    ctx.font = "15px system-ui";
+    ctx.fillText("Nochmal auf Start klicken", W / 2, H / 2 + 20);
+  }
+
+  function startGame() {
+    reset();
+    running = true;
+    ctx.clearRect(0, 0, W, H);
+    step();
+  }
+
+  $("gameStart").addEventListener("click", startGame);
+  $("gameLeft").addEventListener("mousedown", () => keys.left = true);
+  $("gameLeft").addEventListener("mouseup", () => keys.left = false);
+  $("gameLeft").addEventListener("mouseleave", () => keys.left = false);
+  $("gameLeft").addEventListener("touchstart", e => { e.preventDefault(); keys.left = true; });
+  $("gameLeft").addEventListener("touchend", e => { e.preventDefault(); keys.left = false; });
+  $("gameRight").addEventListener("mousedown", () => keys.right = true);
+  $("gameRight").addEventListener("mouseup", () => keys.right = false);
+  $("gameRight").addEventListener("mouseleave", () => keys.right = false);
+  $("gameRight").addEventListener("touchstart", e => { e.preventDefault(); keys.right = true; });
+  $("gameRight").addEventListener("touchend", e => { e.preventDefault(); keys.right = false; });
+
+  document.addEventListener("keydown", e => {
+    if (document.getElementById("tabGame").hidden) return;
+    if (e.key === "ArrowLeft") { keys.left = true; e.preventDefault(); }
+    if (e.key === "ArrowRight") { keys.right = true; e.preventDefault(); }
+  });
+  document.addEventListener("keyup", e => {
+    if (e.key === "ArrowLeft") keys.left = false;
+    if (e.key === "ArrowRight") keys.right = false;
+  });
+
+  // Anfangsbild
+  ctx.fillStyle = "#1d9bf0";
+  ctx.fillRect(player.x, player.y, player.w, player.h);
+})();
 </script>
 </body>
 </html>
