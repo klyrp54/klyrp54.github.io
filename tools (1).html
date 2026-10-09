@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KLYRP67676767676TOOLS</title>
+<style>
+  :root { --bg:#f6f7f9; --card:#ffffff; --text:#1d1f23; --muted:#6b7280; --accent:#2563eb; --border:#e5e7eb; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#111318; --card:#1a1d24; --text:#e8eaee; --muted:#9aa1ad; --accent:#6ea0ff; --border:#2a2e38; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.5 system-ui, "Segoe UI", Arial, sans-serif; }
+  main { max-width:760px; margin:0 auto; padding:24px 16px 60px; }
+  h1 { font-size:1.6rem; margin:0 0 4px; }
+  .sub { color:var(--muted); margin:0 0 20px; }
+  nav { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px; }
+  nav button { background:var(--card); color:var(--text); border:1px solid var(--border); border-radius:8px; padding:9px 14px; cursor:pointer; font-size:.95rem; }
+  nav button.active { background:var(--accent); border-color:var(--accent); color:#fff; }
+  section.tab { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:18px; }
+  h2 { font-size:1.15rem; margin:0 0 12px; }
+  label { display:block; margin:10px 0 4px; font-size:.9rem; color:var(--muted); }
+  textarea, select, input[type=file] { width:100%; background:var(--bg); color:var(--text); border:1px solid var(--border); border-radius:8px; padding:10px; font:inherit; }
+  textarea { min-height:160px; resize:vertical; font-family:ui-monospace, Consolas, monospace; font-size:.9rem; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; }
+  .btn { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:10px 16px; cursor:pointer; font:inherit; }
+  .btn.secondary { background:transparent; color:var(--accent); border:1px solid var(--accent); }
+  .btn:disabled { opacity:.5; cursor:default; }
+  .opts label { display:inline-flex; align-items:center; gap:6px; margin:6px 14px 0 0; color:var(--text); }
+  .status { color:var(--muted); margin-top:10px; min-height:1.4em; }
+  img#preview { max-width:100%; max-height:260px; margin-top:12px; border-radius:8px; border:1px solid var(--border); }
+  .group { border:1px solid var(--border); border-radius:8px; padding:10px 12px; margin-top:10px; }
+  .group b { display:block; margin-bottom:4px; }
+  .group ul { margin:0; padding-left:18px; }
+  .keep { color:#16a34a; }
+  footer { margin-top:24px; color:var(--muted); font-size:.85rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>KLYRP67</h1>
+  <p class="sub">Foto in Text umwandeln und Duplikate finden. Alles läuft im Browser, deine Dateien werden nicht hochgeladen.</p>
+
+  <nav>
+    <button class="active" data-tab="tabOcr">Foto zu Text</button>
+    <button data-tab="tabText">Text-Duplikate</button>
+    <button data-tab="tabFiles">Datei-Duplikate</button>
+  </nav>
+
+  <section class="tab" id="tabOcr">
+    <h2>Foto zu Text</h2>
+    <label for="img">Foto oder Screenshot wählen</label>
+    <input type="file" id="img" accept="image/*">
+    <img id="preview" alt="Vorschau" hidden>
+    <label for="lang">Sprache</label>
+    <select id="lang">
+      <option value="deu+eng">Deutsch + Englisch</option>
+      <option value="deu">Deutsch</option>
+      <option value="eng">Englisch</option>
+    </select>
+    <label for="mode">Modus</label>
+    <select id="mode">
+      <option value="names">Nur Vor- und Nachnamen</option>
+      <option value="all">Gesamter Text</option>
+    </select>
+    <div class="opts" id="nameOpts">
+      <label><input type="checkbox" id="optFlip" checked> "Nachname, Vorname" umdrehen</label>
+      <label><input type="checkbox" id="optNameDedup" checked> Doppelte Namen entfernen</label>
+      <label><input type="checkbox" id="optNameSort"> Alphabetisch sortieren</label>
+    </div>
+    <div class="row"><button class="btn" id="ocrBtn">Text erkennen</button></div>
+    <div class="status" id="status"></div>
+    <label for="ocrOut">Erkannter Text</label>
+    <textarea id="ocrOut"></textarea>
+    <div class="row">
+      <button class="btn secondary" id="copyOcr">Kopieren</button>
+      <button class="btn secondary" id="saveOcr">Als .txt speichern</button>
+    </div>
+    <details style="margin-top:14px">
+      <summary>Rohtext und aussortierte Zeilen ansehen</summary>
+      <label for="rawOut">Rohtext der Erkennung</label>
+      <textarea id="rawOut" readonly></textarea>
+      <label for="skipOut">Aussortiert (bitte prüfen, falls ein Name fehlt)</label>
+      <textarea id="skipOut" readonly></textarea>
+    </details>
+  </section>
+
+  <section class="tab" id="tabText" hidden>
+    <h2>Doppelte Zeilen entfernen</h2>
+    <label for="dedupIn">Text einfügen (eine Zeile pro Eintrag)</label>
+    <textarea id="dedupIn"></textarea>
+    <div class="opts">
+      <label><input type="checkbox" id="optCase" checked> Groß-/Kleinschreibung ignorieren</label>
+      <label><input type="checkbox" id="optTrim" checked> Leerzeichen am Rand entfernen</label>
+      <label><input type="checkbox" id="optEmpty" checked> Leere Zeilen entfernen</label>
+      <label><input type="checkbox" id="optSort"> Alphabetisch sortieren</label>
+    </div>
+    <div class="row"><button class="btn" id="dedupBtn">Duplikate entfernen</button></div>
+    <div class="status" id="dedupInfo"></div>
+    <label for="dedupOut">Ergebnis</label>
+    <textarea id="dedupOut" readonly></textarea>
+    <div class="row"><button class="btn secondary" id="copyDedup">Kopieren</button></div>
+  </section>
+
+  <section class="tab" id="tabFiles" hidden>
+    <h2>Doppelte Dateien finden</h2>
+    <label for="files">Dateien oder Fotos auswählen (mehrere möglich)</label>
+    <input type="file" id="files" multiple>
+    <div class="status" id="fileInfo"></div>
+    <div id="fileResult"></div>
+    <p class="sub">Es werden Dateien mit identischem Inhalt gefunden, auch wenn sie anders heißen. Löschen musst du sie selbst, der Browser darf keine Dateien entfernen.</p>
+  </section>
+
+  <footer>Texterkennung mit Tesseract.js (Open Source). Beim ersten Start lädt der Browser die Sprachdaten nach.</footer>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+
+// Tabs
+document.querySelectorAll("nav button").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll("section.tab").forEach(s => s.hidden = true);
+    btn.classList.add("active");
+    $(btn.dataset.tab).hidden = false;
+  });
+});
+
+function copyText(text, statusEl) {
+  navigator.clipboard.writeText(text).then(
+    () => { statusEl.textContent = "Kopiert."; },
+    () => { statusEl.textContent = "Kopieren nicht möglich, bitte Text markieren und selbst kopieren."; }
+  );
+}
+
+// Namen aus dem erkannten Text herausfiltern
+const PARTICLES = new Set(["von", "van", "vom", "zu", "zur", "de", "der", "den", "di", "da", "del", "la", "le", "du", "dos", "ten", "ter"]);
+
+function capWord(w) {
+  if (PARTICLES.has(w.toLowerCase())) return w.toLowerCase();
+  const mixed = w !== w.toUpperCase() && w !== w.toLowerCase();
+  if (mixed) return w; // z. B. McDonald oder Müller bleibt unverändert
+  return w.toLowerCase().replace(/(^|[-'’])(\p{L})/gu, (m, p, c) => p + c.toUpperCase());
+}
+
+function extractNames(text) {
+  const flip = $("optFlip").checked;
+  const names = [];
+  const skipped = [];
+  for (const rawLine of text.split(/\r?\n/)) {
+    let line = rawLine
+      .replace(/[^\p{L}\s,'’-]/gu, " ")
+      .replace(/\s+/g, " ")
+      .replace(/^[\s,'’-]+|[\s,'’-]+$/g, "");
+    if (!line) continue;
+    if (flip && line.includes(",")) {
+      const parts = line.split(",").map(p => p.trim()).filter(Boolean);
+      if (parts.length === 2) line = parts[1] + " " + parts[0];
+    }
+    line = line.replace(/,/g, " ").replace(/\s+/g, " ").trim();
+    const words = line.split(" ");
+    const looksLikeName = words.length >= 2 && words.length <= 4 &&
+      words.every(w => w.replace(/[-'’]/g, "").length >= 2);
+    if (looksLikeName) names.push(words.map(capWord).join(" "));
+    else skipped.push(rawLine.trim());
+  }
+  let out = names;
+  if ($("optNameDedup").checked) {
+    const seen = new Set();
+    out = out.filter(n => {
+      const k = n.toLowerCase();
+      if (seen.has(k)) return false;
+      seen.add(k);
+      return true;
+    });
+  }
+  if ($("optNameSort").checked) out = out.slice().sort((a, b) => a.localeCompare(b, "de"));
+  return { names: out, skipped };
+}
+
+$("mode").addEventListener("change", () => {
+  $("nameOpts").hidden = $("mode").value !== "names";
+});
+
+// Foto zu Text
+let ocrFile = null;
+$("img").addEventListener("change", e => {
+  ocrFile = e.target.files[0] || null;
+  if (ocrFile) {
+    $("preview").src = URL.createObjectURL(ocrFile);
+    $("preview").hidden = false;
+  }
+});
+
+$("ocrBtn").addEventListener("click", async () => {
+  if (!ocrFile) { $("status").textContent = "Bitte zuerst ein Foto wählen."; return; }
+  if (typeof Tesseract === "undefined") { $("status").textContent = "Texterkennung konnte nicht geladen werden. Internetverbindung prüfen."; return; }
+  $("ocrBtn").disabled = true;
+  $("status").textContent = "Lade Erkennung …";
+  try {
+    const res = await Tesseract.recognize(ocrFile, $("lang").value, {
+      logger: m => {
+        if (m.status === "recognizing text") {
+          $("status").textContent = "Erkenne Text … " + Math.round(m.progress * 100) + " %";
+        }
+      }
+    });
+    const raw = res.data.text.trim();
+    $("rawOut").value = raw;
+    if ($("mode").value === "names") {
+      const r = extractNames(raw);
+      $("ocrOut").value = r.names.join("\n");
+      $("skipOut").value = r.skipped.join("\n");
+      $("status").textContent = r.names.length
+        ? r.names.length + " Namen erkannt. Bitte kurz auf Tippfehler prüfen."
+        : "Keine Namen gefunden. Schau unter Rohtext nach.";
+    } else {
+      $("ocrOut").value = raw;
+      $("skipOut").value = "";
+      $("status").textContent = raw ? "Fertig." : "Kein Text gefunden.";
+    }
+  } catch (err) {
+    $("status").textContent = "Fehler: " + err.message;
+  }
+  $("ocrBtn").disabled = false;
+});
+
+$("copyOcr").addEventListener("click", () => copyText($("ocrOut").value, $("status")));
+$("saveOcr").addEventListener("click", () => {
+  const blob = new Blob([$("ocrOut").value], { type: "text/plain;charset=utf-8" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "erkannter-text.txt";
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+// Text-Duplikate
+$("dedupBtn").addEventListener("click", () => {
+  const lines = $("dedupIn").value.split(/\r?\n/);
+  const ignoreCase = $("optCase").checked;
+  const trim = $("optTrim").checked;
+  const skipEmpty = $("optEmpty").checked;
+  const seen = new Set();
+  const out = [];
+  for (const raw of lines) {
+    const line = trim ? raw.trim() : raw;
+    if (skipEmpty && line === "") continue;
+    const key = ignoreCase ? line.toLowerCase() : line;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(line);
+  }
+  if ($("optSort").checked) out.sort((a, b) => a.localeCompare(b, "de"));
+  $("dedupOut").value = out.join("\n");
+  const removed = lines.length - out.length;
+  $("dedupInfo").textContent = removed + " von " + lines.length + " Zeilen entfernt, " + out.length + " übrig.";
+});
+$("copyDedup").addEventListener("click", () => copyText($("dedupOut").value, $("dedupInfo")));
+
+// Datei-Duplikate
+function formatSize(bytes) {
+  if (bytes < 1024) return bytes + " B";
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+  return (bytes / 1024 / 1024).toFixed(1) + " MB";
+}
+
+$("files").addEventListener("change", async e => {
+  const files = [...e.target.files];
+  const result = $("fileResult");
+  result.textContent = "";
+  if (!files.length) { $("fileInfo").textContent = ""; return; }
+  if (!window.crypto || !crypto.subtle) {
+    $("fileInfo").textContent = "Dein Browser unterstützt die Prüfung hier nicht (https nötig).";
+    return;
+  }
+  $("fileInfo").textContent = "Prüfe " + files.length + " Dateien …";
+  const groups = new Map();
+  for (const f of files) {
+    const buf = await f.arrayBuffer();
+    const hash = await crypto.subtle.digest("SHA-256", buf);
+    const hex = Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, "0")).join("");
+    if (!groups.has(hex)) groups.set(hex, []);
+    groups.get(hex).push(f);
+  }
+  const dupGroups = [...groups.values()].filter(g => g.length > 1);
+  const dupCount = dupGroups.reduce((n, g) => n + g.length - 1, 0);
+  $("fileInfo").textContent = dupGroups.length
+    ? dupCount + " doppelte Datei(en) in " + dupGroups.length + " Gruppe(n) gefunden."
+    : "Keine Duplikate gefunden.";
+  dupGroups.forEach((group, i) => {
+    const box = document.createElement("div");
+    box.className = "group";
+    const title = document.createElement("b");
+    title.textContent = "Gruppe " + (i + 1) + " (" + formatSize(group[0].size) + ")";
+    box.appendChild(title);
+    const ul = document.createElement("ul");
+    group.forEach((f, idx) => {
+      const li = document.createElement("li");
+      li.textContent = f.name;
+      if (idx === 0) {
+        const tag = document.createElement("span");
+        tag.className = "keep";
+        tag.textContent = "  behalten";
+        li.appendChild(tag);
+      }
+      ul.appendChild(li);
+    });
+    box.appendChild(ul);
+    result.appendChild(box);
+  });
+});
+</script>
+</body>
+</html>
