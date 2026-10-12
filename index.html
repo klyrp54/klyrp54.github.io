@@ -5,106 +5,117 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KLYRP67</title>
 <style>
-:root{--text:#111;--muted:rgba(0,0,0,.5);--accent:#0a84ff;--g:rgba(255,255,255,.42);--g2:rgba(255,255,255,.3);--b:rgba(255,255,255,.65);--sh:rgba(40,60,120,.18)}
-@media(prefers-color-scheme:dark){:root{--text:#f5f5f7;--muted:rgba(255,255,255,.55);--accent:#409cff;--g:rgba(255,255,255,.1);--g2:rgba(255,255,255,.07);--b:rgba(255,255,255,.2);--sh:rgba(0,0,0,.5)}}
+:root{color-scheme:dark;--text:#f5f5f7;--muted:rgba(255,255,255,.55);--accent:#409cff;--g:rgba(255,255,255,.09);--g2:rgba(0,0,0,.28);--b:rgba(255,255,255,.18);--sh:rgba(0,0,0,.45)}
 *{box-sizing:border-box}
-html{min-height:100%}
-body{margin:0;min-height:100vh;color:var(--text);font:16px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;
-background:radial-gradient(40vmax 40vmax at 10% 5%,#8ec5ff 0,transparent 60%),radial-gradient(45vmax 45vmax at 95% 20%,#d9a6ff 0,transparent 60%),radial-gradient(50vmax 50vmax at 30% 100%,#ffc7a3 0,transparent 60%),#e9eef9;background-attachment:fixed}
-@media(prefers-color-scheme:dark){body{background:radial-gradient(40vmax 40vmax at 10% 5%,#1b4a9c 0,transparent 60%),radial-gradient(45vmax 45vmax at 95% 20%,#5b2a8c 0,transparent 60%),radial-gradient(50vmax 50vmax at 30% 100%,#8a3d2a 0,transparent 60%),#0b0d14;background-attachment:fixed}}
-main{max-width:700px;margin:0 auto;padding:28px 16px 70px}
-h1{font-size:2rem;font-weight:700;letter-spacing:-.03em;margin:6px 6px 16px}
-.glass,section.tab,nav,.banner,.group{background:var(--g);border:1px solid var(--b);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);box-shadow:0 8px 32px var(--sh),inset 0 1px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255,.1)}
+body{margin:0;min-height:100vh;background:#05060b;color:var(--text);font:16px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased}
+#bg{position:fixed;inset:0;z-index:-1;overflow:hidden;background:#05060b center/cover no-repeat}
+#bg i{position:absolute;border-radius:50%;filter:blur(90px);opacity:.85;animation:drift 22s ease-in-out infinite alternate}
+#bg .b1{width:55vmax;height:55vmax;left:-15vmax;top:-18vmax;background:#1f5fd6}
+#bg .b2{width:50vmax;height:50vmax;right:-14vmax;top:-6vmax;background:#8a3ffc;animation-delay:-6s}
+#bg .b3{width:60vmax;height:40vmax;left:15vmax;bottom:-20vmax;background:#ff6a3d;animation-delay:-12s}
+#bg .b4{width:35vmax;height:35vmax;right:10vmax;bottom:-8vmax;background:#18c7a6;opacity:.5;animation-delay:-3s}
+@keyframes drift{to{transform:translate(8vmax,6vmax) scale(1.15)}}
+#bg.custom i{display:none}
+#bg.custom::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.35)}
+main{max-width:1240px;margin:0 auto;padding:22px 18px 60px}
+.top{display:flex;align-items:center;justify-content:space-between;margin:4px 4px 14px}
+h1{font-size:2rem;font-weight:700;letter-spacing:-.03em;margin:0}
+.glass,.card,nav,.banner,.group{background:var(--g);border:1px solid var(--b);backdrop-filter:blur(30px) saturate(180%);-webkit-backdrop-filter:blur(30px) saturate(180%);box-shadow:0 10px 40px var(--sh),inset 0 1px 0 rgba(255,255,255,.28)}
 nav{position:sticky;top:10px;z-index:5;display:flex;gap:2px;padding:4px;margin-bottom:16px;border-radius:999px;overflow-x:auto;scrollbar-width:none}
-nav button{flex:1;white-space:nowrap;background:none;border:0;color:var(--text);padding:9px 14px;border-radius:999px;font:inherit;font-size:.88rem;cursor:pointer;transition:.2s}
-nav button.active{background:var(--g);box-shadow:0 2px 10px var(--sh),inset 0 1px 0 rgba(255,255,255,.7);font-weight:600}
-section.tab{border-radius:30px;padding:22px}
-h2{font-size:1.2rem;letter-spacing:-.02em;margin:0 0 6px}
-label{display:block;margin:14px 0 6px 4px;font-size:.78rem;color:var(--muted);font-weight:500}
-textarea,select,input[type=file],input[type=text]{width:100%;color:var(--text);background:var(--g2);border:1px solid var(--b);border-radius:16px;padding:11px 14px;font:inherit;outline:0;box-shadow:inset 0 1px 3px rgba(0,0,0,.06)}
+nav button{flex:1;white-space:nowrap;background:none;border:0;color:var(--text);padding:9px 14px;border-radius:999px;font:inherit;font-size:.9rem;cursor:pointer;transition:.2s}
+nav button.active{background:rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.35);font-weight:600}
+.card{border-radius:28px;padding:20px}
+.split{display:grid;grid-template-columns:minmax(290px,370px) 1fr;gap:16px;align-items:start}
+@media(max-width:820px){.split{grid-template-columns:1fr}}
+label{display:block;margin:12px 0 5px 4px;font-size:.76rem;color:var(--muted)}
+textarea,select,input[type=file],input[type=text]{width:100%;color:var(--text);background:var(--g2);border:1px solid var(--b);border-radius:16px;padding:10px 13px;font:inherit;outline:0}
 textarea:focus,input:focus,select:focus{border-color:var(--accent)}
-textarea{min-height:130px;resize:vertical;font:.85rem ui-monospace,Menlo,monospace}
-.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.btn{color:#fff;background:linear-gradient(180deg,rgba(255,255,255,.3),transparent),var(--accent);border:1px solid rgba(255,255,255,.5);border-radius:999px;padding:10px 20px;font:inherit;font-size:.92rem;cursor:pointer;box-shadow:0 4px 14px rgba(10,132,255,.35),inset 0 1px 0 rgba(255,255,255,.6);transition:.15s}
+textarea{resize:vertical;min-height:120px;font:.85rem ui-monospace,Menlo,monospace}
+#ocrOut{height:calc(100vh - 290px);min-height:380px;font-size:1rem;line-height:1.6}
+#outCard.full{position:fixed;inset:12px;z-index:50;background:rgba(14,16,24,.92)}
+#outCard.full #ocrOut{height:calc(100vh - 170px)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.btn{color:#fff;background:linear-gradient(180deg,rgba(255,255,255,.28),transparent),var(--accent);border:1px solid rgba(255,255,255,.4);border-radius:999px;padding:9px 18px;font:inherit;font-size:.9rem;cursor:pointer;box-shadow:0 4px 16px rgba(10,132,255,.4),inset 0 1px 0 rgba(255,255,255,.5);transition:.15s}
 .btn:active{transform:scale(.97)}.btn:disabled{opacity:.4}
-.btn.secondary,.btn.decline{color:var(--text);background:var(--g);box-shadow:0 2px 10px var(--sh),inset 0 1px 0 rgba(255,255,255,.55);border-color:var(--b)}
-.opts label{display:inline-flex;align-items:center;gap:7px;margin:10px 14px 0 0;color:var(--text);font-size:.88rem}
-.status{color:var(--muted);margin-top:10px;min-height:1.3em;font-size:.88rem}
-img#preview{max-width:100%;max-height:220px;margin-top:12px;border-radius:18px;border:1px solid var(--b)}
+.btn.secondary,.btn.decline,.chip{color:var(--text);background:var(--g);border:1px solid var(--b);box-shadow:inset 0 1px 0 rgba(255,255,255,.25)}
+.chip{border-radius:999px;padding:6px 13px;font:inherit;font-size:.82rem;cursor:pointer}
+.bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.bar .sp{flex:1}.bar b{font-size:1.1rem}
+#count{color:var(--muted);font-size:.85rem}
+#drop{border:1.5px dashed var(--b);border-radius:20px;min-height:150px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:14px;text-align:center;color:var(--muted);cursor:pointer;transition:.2s;background:var(--g2)}
+#drop.over{border-color:var(--accent);background:rgba(64,156,255,.15)}
+#preview{max-width:100%;max-height:260px;border-radius:12px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media(max-width:560px){.grid2{grid-template-columns:1fr}}
-.group{border-radius:18px;padding:10px 14px;margin-top:10px}
-.keep{color:#30d158}
-details{margin-top:14px}summary{cursor:pointer;color:var(--accent);font-size:.9rem}
-.banner{border-radius:22px;padding:16px;margin:10px 0}
-.log{background:rgba(20,20,24,.85);color:#d1d1d6;border-radius:18px;padding:14px;font:.8rem ui-monospace,Menlo,monospace;min-height:50px;white-space:pre-wrap;word-break:break-word}
+.opts label{display:flex;align-items:center;gap:8px;margin:8px 0 0;color:var(--text);font-size:.88rem}
+.status{color:var(--muted);margin-top:10px;min-height:1.3em;font-size:.88rem}
+details{margin-top:12px}summary{cursor:pointer;color:var(--accent);font-size:.9rem}
+.group{border-radius:16px;padding:10px 14px;margin-top:10px}.keep{color:#30d158}
+.banner{border-radius:20px;padding:16px;margin:10px 0}
+.log{background:rgba(0,0,0,.45);color:#d1d1d6;border-radius:16px;padding:14px;font:.8rem ui-monospace,Menlo,monospace;min-height:50px;white-space:pre-wrap;word-break:break-word}
 .log .ok{color:#30d158}.log .no{color:#ff6961}
 table.cmp{width:100%;border-collapse:collapse;margin-top:12px;font-size:.85rem}
 table.cmp th,table.cmp td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--b)}
 table.cmp th{color:var(--muted);font-weight:500}
-.pill{padding:2px 10px;border-radius:99px;font-size:.76rem;background:var(--g2)}.pill.yes{color:#30d158}
 #gameWrap{display:flex;flex-direction:column;align-items:center;gap:10px}
-#gameCanvas{background:rgba(15,15,20,.85);border-radius:22px;max-width:100%;touch-action:none;border:1px solid var(--b)}
+#gameCanvas{background:rgba(0,0,0,.5);border-radius:20px;max-width:100%;touch-action:none;border:1px solid var(--b)}
 .scoreRow{display:flex;gap:18px}.scoreRow b{color:var(--accent)}
 </style>
 </head>
 <body>
+<div id="bg"><i class="b1"></i><i class="b2"></i><i class="b3"></i><i class="b4"></i></div>
 <main>
+<div class="top">
 <h1>KLYRP67</h1>
+<div class="row" style="margin:0"><button class="chip" id="wpBtn">Hintergrund</button><button class="chip" id="wpReset" hidden>Zurücksetzen</button><input type="file" id="wpFile" accept="image/*" hidden></div>
+</div>
 
 <nav>
-<button class="active" data-tab="tabOcr">Foto zu Text</button>
+<button class="active" data-tab="tabOcr">Foto zu Liste</button>
 <button data-tab="tabCmp">Vergleich</button>
-<button data-tab="tabText">Duplikate</button>
+<button data-tab="tabText">Text-Duplikate</button>
 <button data-tab="tabFiles">Dateien</button>
 <button data-tab="tabCookie">Cookies</button>
 <button data-tab="tabGame">Rätsel</button>
 </nav>
 
 <section class="tab" id="tabOcr">
-<input type="file" id="img" accept="image/*">
-<img id="preview" alt="" hidden>
+<div class="split">
+<div class="card">
+<div id="drop"><span id="dropText">Bild hier ablegen, mit Strg+V einfügen oder klicken</span><img id="preview" alt="" hidden></div>
+<input type="file" id="img" accept="image/*" hidden>
+<div class="row"><button class="btn" id="pasteBtn">Aus Zwischenablage</button><button class="btn secondary" id="pickBtn">Datei wählen</button></div>
 <div class="grid2">
-<div><label for="lang">Sprache</label>
-<select id="lang"><option value="deu+eng">Deutsch + Englisch</option><option value="deu">Deutsch</option><option value="eng">Englisch</option></select></div>
-<div><label for="mode">Modus</label>
-<select id="mode"><option value="filter">Filtern</option><option value="names">Namen</option><option value="all">Alles</option></select></div>
+<div><label for="mode">Modus</label><select id="mode"><option value="filter">Zeilen</option><option value="names">Namen</option><option value="all">Alles</option></select></div>
+<div><label for="lang">Sprache</label><select id="lang"><option value="deu+eng">DE + EN</option><option value="deu">Deutsch</option><option value="eng">Englisch</option></select></div>
 </div>
-
-<div id="filterOpts">
-<label for="incl">Behalten, wenn enthält</label>
-<input type="text" id="incl" placeholder="leer = alle">
-<label for="excl">Entfernen, wenn enthält</label>
-<input type="text" id="excl" value="Admin Platform, Privat, Öffentlich, Berechtigungen, Einstellungen, Teamarbeitsbereich">
 <div class="opts">
-<label><input type="checkbox" id="fDedup" checked> Ohne Doppelte</label>
-<label><input type="checkbox" id="fSort" checked> Sortiert</label>
-<label><input type="checkbox" id="fShort" checked> Kurze Zeilen weg</label>
-</div>
-</div>
-
-<div class="opts" id="nameOpts" hidden>
-<label><input type="checkbox" id="optFlip" checked> Nachname, Vorname drehen</label>
-<label><input type="checkbox" id="optNameDedup" checked> Ohne Doppelte</label>
-<label><input type="checkbox" id="optNameSort"> Sortiert</label>
-</div>
-
-<div class="row"><button class="btn" id="ocrBtn">Erkennen</button></div>
-<div class="status" id="status"></div>
-<textarea id="ocrOut" placeholder="Ergebnis"></textarea>
-<div class="row">
-<button class="btn secondary" id="copyOcr">Kopieren</button>
-<button class="btn secondary" id="saveOcr">Speichern</button>
-<button class="btn secondary" id="toCmp">Zum Vergleich</button>
+<label><input type="checkbox" id="fDedup" checked> Doppelte entfernen</label>
+<label><input type="checkbox" id="fUnique"> Alles löschen, was doppelt vorkommt</label>
+<label><input type="checkbox" id="fSort"> Sortieren</label>
+<label><input type="checkbox" id="autoRun" checked> Sofort starten</label>
 </div>
 <details>
-<summary>Rohtext</summary>
-<label for="rawOut">Roh</label><textarea id="rawOut" readonly></textarea>
-<label for="skipOut">Aussortiert</label><textarea id="skipOut" readonly></textarea>
+<summary>Filter</summary>
+<label for="incl">Behalten, wenn enthält</label><input type="text" id="incl" placeholder="leer = alle">
+<label for="excl">Entfernen, wenn enthält</label><input type="text" id="excl" placeholder="z. B. Privat, Admin">
+<div class="opts"><label><input type="checkbox" id="fShort" checked> Zeilen unter 3 Zeichen weg</label><label><input type="checkbox" id="optFlip" checked> Namen: Nachname, Vorname drehen</label></div>
 </details>
+<div class="row"><button class="btn" id="ocrBtn">Erkennen</button></div>
+<div class="status" id="status"></div>
+</div>
+
+<div class="card" id="outCard">
+<div class="bar"><b>Liste</b><span id="count"></span><span class="sp"></span>
+<button class="chip" id="fullBtn">Vollbild</button><button class="chip" id="copyOcr">Kopieren</button><button class="chip" id="saveOcr">Speichern</button><button class="chip" id="toCmp">Vergleich</button></div>
+<textarea id="ocrOut" placeholder="Ergebnis"></textarea>
+<details><summary id="dupSum">Entfernte Doppelte</summary><textarea id="dupOut" readonly></textarea></details>
+<details><summary>Rohtext und aussortiert</summary><textarea id="rawOut" readonly></textarea><label>Aussortiert</label><textarea id="skipOut" readonly></textarea></details>
+</div>
+</div>
 </section>
 
-<section class="tab" id="tabCmp" hidden>
+<section class="tab card" id="tabCmp" hidden>
 <div class="grid2">
 <div><label for="cmpA">Liste A</label><textarea id="cmpA"></textarea></div>
 <div><label for="cmpB">Liste B</label><textarea id="cmpB"></textarea></div>
@@ -118,8 +129,8 @@ table.cmp th{color:var(--muted);font-weight:500}
 <label for="both">Beide</label><textarea id="both" readonly></textarea>
 </section>
 
-<section class="tab" id="tabText" hidden>
-<textarea id="dedupIn" placeholder="Text einfügen"></textarea>
+<section class="tab card" id="tabText" hidden>
+<textarea id="dedupIn" placeholder="Text einfügen" style="min-height:220px"></textarea>
 <div class="opts">
 <label><input type="checkbox" id="optCase" checked> Groß/klein egal</label>
 <label><input type="checkbox" id="optTrim" checked> Trimmen</label>
@@ -128,38 +139,31 @@ table.cmp th{color:var(--muted);font-weight:500}
 </div>
 <div class="row"><button class="btn" id="dedupBtn">Entfernen</button><button class="btn secondary" id="copyDedup">Kopieren</button></div>
 <div class="status" id="dedupInfo"></div>
-<textarea id="dedupOut" readonly placeholder="Ergebnis"></textarea>
+<textarea id="dedupOut" readonly placeholder="Ergebnis" style="min-height:220px"></textarea>
 </section>
 
-<section class="tab" id="tabFiles" hidden>
+<section class="tab card" id="tabFiles" hidden>
 <input type="file" id="files" multiple>
 <div class="status" id="fileInfo"></div>
 <div id="fileResult"></div>
 </section>
 
-<section class="tab" id="tabCookie" hidden>
-<h2>Cookie-Demo</h2>
-<div class="status">Läuft nur lokal, nichts wird gesendet.</div>
+<section class="tab card" id="tabCookie" hidden>
+<div class="status" style="margin:0 0 6px">Cookie-Demo, läuft nur lokal.</div>
 <div class="banner" id="cookieBanner">
 <p style="margin:0">🍪 Diese Seite nutzt Cookies.</p>
 <div class="row"><button class="btn" id="btnAccept">Akzeptieren</button><button class="btn decline" id="btnDecline">Ablehnen</button><button class="btn secondary" id="btnReset">Reset</button></div>
 </div>
 <div class="status" id="cookieStatus"></div>
 <div class="log" id="cookieLog">–</div>
-<table class="cmp" id="cmpTable" hidden>
-<thead><tr><th></th><th>Vorher</th><th>Nachher</th></tr></thead>
-<tbody id="cmpBody"></tbody>
-</table>
-<details>
-<summary>Rechtliches</summary>
-<p>Cookie-Banner = Einwilligung nach DSGVO und ePrivacy. Technisch nötige Daten (z. B. IP) brauchen keine, Tracking und Analyse erst nach Zustimmung.</p>
-</details>
+<table class="cmp" id="cmpTable" hidden><thead><tr><th></th><th>Vorher</th><th>Nachher</th></tr></thead><tbody id="cmpBody"></tbody></table>
+<details><summary>Rechtliches</summary><p>Cookie-Banner = Einwilligung nach DSGVO und ePrivacy. Technisch nötige Daten brauchen keine, Tracking und Analyse erst nach Zustimmung.</p></details>
 </section>
 
-<section class="tab" id="tabGame" hidden>
+<section class="tab card" id="tabGame" hidden>
 <div id="riddleBox">
-<h2>🍎 Rätsel</h2>
-<p class="status">Äpfel in 4 Reihen: 6, 7, 6, 7. Schreib die Zahlen hintereinander, nicht addieren.</p>
+<b>🍎 Rätsel</b>
+<p class="status">Äpfel in 4 Reihen: 6, 7, 6, 7. Zahlen hintereinander schreiben, nicht addieren.</p>
 <input type="text" id="riddleIn" inputmode="numeric" placeholder="????">
 <div class="row"><button class="btn" id="riddleBtn">Prüfen</button></div>
 <div class="status" id="riddleStatus"></div>
@@ -181,103 +185,135 @@ function showTab(id){
 }
 document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
 function copyText(t,el){navigator.clipboard.writeText(t).then(()=>el.textContent="Kopiert.",()=>el.textContent="Bitte selbst markieren.");}
-const splitTerms=s=>s.split(",").map(x=>x.trim().toLowerCase()).filter(Boolean);
+const terms=s=>s.split(",").map(x=>x.trim().toLowerCase()).filter(Boolean);
 
-const PARTICLES=new Set(["von","van","vom","zu","zur","de","der","den","di","da","del","la","le","du","dos","ten","ter"]);
+// ---- Hintergrund
+function setWp(url){$("bg").style.backgroundImage=url?"url("+url+")":"";$("bg").classList.toggle("custom",!!url);$("wpReset").hidden=!url;}
+try{setWp(localStorage.getItem("wp"));}catch(e){}
+$("wpBtn").addEventListener("click",()=>$("wpFile").click());
+$("wpFile").addEventListener("change",async e=>{
+  const f=e.target.files[0];if(!f)return;
+  const bmp=await createImageBitmap(f),s=Math.min(1,1800/bmp.width);
+  const c=document.createElement("canvas");c.width=bmp.width*s;c.height=bmp.height*s;
+  c.getContext("2d").drawImage(bmp,0,0,c.width,c.height);
+  const url=c.toDataURL("image/jpeg",.82);setWp(url);
+  try{localStorage.setItem("wp",url);}catch(e){}
+});
+$("wpReset").addEventListener("click",()=>{setWp("");try{localStorage.removeItem("wp");}catch(e){}});
+
+// ---- Verarbeitung
+const PART=new Set(["von","van","vom","zu","zur","de","der","den","di","da","del","la","le","du","dos","ten","ter"]);
 function capWord(w){
-  if(PARTICLES.has(w.toLowerCase()))return w.toLowerCase();
+  if(PART.has(w.toLowerCase()))return w.toLowerCase();
   if(w!==w.toUpperCase()&&w!==w.toLowerCase())return w;
   return w.toLowerCase().replace(/(^|[-'’])(\p{L})/gu,(m,p,c)=>p+c.toUpperCase());
 }
-function extractNames(text){
-  const flip=$("optFlip").checked,names=[],skipped=[];
-  for(const raw of text.split(/\r?\n/)){
-    let line=raw.replace(/[^\p{L}\s,'’-]/gu," ").replace(/\s+/g," ").replace(/^[\s,'’-]+|[\s,'’-]+$/g,"");
-    if(!line)continue;
-    if(flip&&line.includes(",")){const p=line.split(",").map(x=>x.trim()).filter(Boolean);if(p.length===2)line=p[1]+" "+p[0];}
-    line=line.replace(/,/g," ").replace(/\s+/g," ").trim();
-    const w=line.split(" ");
-    if(w.length>=2&&w.length<=4&&w.every(x=>x.replace(/[-'’]/g,"").length>=2))names.push(w.map(capWord).join(" "));
-    else skipped.push(raw.trim());
-  }
-  let out=names;
-  if($("optNameDedup").checked){const s=new Set();out=out.filter(n=>{const k=n.toLowerCase();if(s.has(k))return false;s.add(k);return true;});}
-  if($("optNameSort").checked)out=out.slice().sort((a,b)=>a.localeCompare(b,"de"));
-  return{names:out,skipped};
+function toName(raw){
+  let line=raw.replace(/[^\p{L}\s,'’-]/gu," ").replace(/\s+/g," ").replace(/^[\s,'’-]+|[\s,'’-]+$/g,"");
+  if(!line)return null;
+  if($("optFlip").checked&&line.includes(",")){const p=line.split(",").map(x=>x.trim()).filter(Boolean);if(p.length===2)line=p[1]+" "+p[0];}
+  line=line.replace(/,/g," ").replace(/\s+/g," ").trim();
+  const w=line.split(" ");
+  return w.length>=2&&w.length<=4&&w.every(x=>x.replace(/[-'’]/g,"").length>=2)?w.map(capWord).join(" "):null;
 }
-function filterLines(text){
-  const inc=splitTerms($("incl").value),exc=splitTerms($("excl").value),skipped=[];
-  let out=[];
-  for(const raw of text.split(/\r?\n/)){
-    const line=raw.replace(/\s+/g," ").trim();
-    if(!line)continue;
+function process(raw){
+  const mode=$("mode").value,inc=terms($("incl").value),exc=terms($("excl").value),kept=[],skipped=[];
+  for(const r of raw.split(/\r?\n/)){
+    let line=r.replace(/\s+/g," ").trim();if(!line)continue;
+    if(mode==="names"){const n=toName(line);if(n)kept.push(n);else skipped.push(line);continue;}
     const l=line.toLowerCase();
-    const bad=exc.some(t=>l.includes(t))||(inc.length&&!inc.some(t=>l.includes(t)))||($("fShort").checked&&line.length<3);
-    if(bad)skipped.push(line);else out.push(line);
+    if(exc.some(t=>l.includes(t))||(inc.length&&!inc.some(t=>l.includes(t)))||($("fShort").checked&&line.length<3))skipped.push(line);
+    else kept.push(line);
   }
-  if($("fDedup").checked){const s=new Set();out=out.filter(n=>{const k=n.toLowerCase();if(s.has(k))return false;s.add(k);return true;});}
+  const cnt=new Map();kept.forEach(n=>{const k=n.toLowerCase();cnt.set(k,(cnt.get(k)||0)+1);});
+  let out=[],dups=[];const seen=new Set();
+  if($("fUnique").checked){kept.forEach(n=>(cnt.get(n.toLowerCase())===1?out:dups).push(n));dups=[...new Set(dups.map(d=>d.toLowerCase()))];}
+  else if($("fDedup").checked){kept.forEach(n=>{const k=n.toLowerCase();if(seen.has(k))dups.push(n);else{seen.add(k);out.push(n);}});}
+  else out=kept;
   if($("fSort").checked)out.sort((a,b)=>a.localeCompare(b,"de"));
-  return{names:out,skipped};
+  return{out,dups,skipped,total:kept.length};
 }
-function updateMode(){const m=$("mode").value;$("nameOpts").hidden=m!=="names";$("filterOpts").hidden=m!=="filter";}
-$("mode").addEventListener("change",updateMode);updateMode();
 
-async function prepImage(file){
+// ---- Bild laden / einfügen / ablegen
+let ocrFile=null;
+function setImage(f){
+  if(!f)return;ocrFile=f;
+  $("preview").src=URL.createObjectURL(f);$("preview").hidden=false;$("dropText").hidden=true;
+  showTab("tabOcr");
+  if($("autoRun").checked)run();
+}
+$("drop").addEventListener("click",()=>$("img").click());
+$("pickBtn").addEventListener("click",()=>$("img").click());
+$("img").addEventListener("change",e=>setImage(e.target.files[0]));
+["dragenter","dragover"].forEach(ev=>$("drop").addEventListener(ev,e=>{e.preventDefault();$("drop").classList.add("over");}));
+["dragleave","drop"].forEach(ev=>$("drop").addEventListener(ev,e=>{e.preventDefault();$("drop").classList.remove("over");}));
+$("drop").addEventListener("drop",e=>{const f=[...e.dataTransfer.files].find(x=>x.type.startsWith("image/"));setImage(f);});
+document.addEventListener("paste",e=>{
+  const it=[...(e.clipboardData?.items||[])].find(i=>i.type.startsWith("image/"));
+  if(it){e.preventDefault();setImage(it.getAsFile());}
+});
+$("pasteBtn").addEventListener("click",async()=>{
+  try{
+    for(const item of await navigator.clipboard.read()){
+      const t=item.types.find(x=>x.startsWith("image/"));
+      if(t){setImage(new File([await item.getType(t)],"zwischenablage.png",{type:t}));return;}
+    }
+    $("status").textContent="Kein Bild in der Zwischenablage.";
+  }catch(e){$("status").textContent="Zugriff blockiert. Drück Strg+V auf der Seite.";}
+});
+
+async function prep(file){
   const bmp=await createImageBitmap(file),f=bmp.width<2000?2:1;
   const c=document.createElement("canvas");c.width=bmp.width*f;c.height=bmp.height*f;
   const x=c.getContext("2d");x.imageSmoothingQuality="high";x.filter="grayscale(1) contrast(1.2)";
   x.drawImage(bmp,0,0,c.width,c.height);return c;
 }
-let ocrFile=null;
-$("img").addEventListener("change",e=>{
-  ocrFile=e.target.files[0]||null;
-  if(ocrFile){$("preview").src=URL.createObjectURL(ocrFile);$("preview").hidden=false;}
-});
-$("ocrBtn").addEventListener("click",async()=>{
+function render(raw){
+  $("rawOut").value=raw;
+  if($("mode").value==="all"){$("ocrOut").value=raw;$("dupOut").value="";$("skipOut").value="";$("count").textContent="";$("status").textContent=raw?"Fertig.":"Kein Text.";return;}
+  const r=process(raw);
+  $("ocrOut").value=r.out.join("\n");$("dupOut").value=r.dups.join("\n");$("skipOut").value=r.skipped.join("\n");
+  $("dupSum").textContent="Entfernte Doppelte ("+r.dups.length+")";
+  $("count").textContent=r.total+" erkannt · "+r.dups.length+" doppelt · "+r.out.length+" übrig";
+  $("status").textContent=r.out.length?"Fertig. Bitte kurz auf Tippfehler prüfen.":"Nichts gefunden.";
+}
+async function run(){
   if(!ocrFile){$("status").textContent="Erst ein Bild wählen.";return;}
   if(typeof Tesseract==="undefined"){$("status").textContent="Erkennung nicht geladen. Internet prüfen.";return;}
   $("ocrBtn").disabled=true;$("status").textContent="Lade …";
-  let worker;
+  let w;
   try{
-    const img=await prepImage(ocrFile);
-    worker=await Tesseract.createWorker($("lang").value,1,{logger:m=>{
-      if(m.status==="recognizing text")$("status").textContent=Math.round(m.progress*100)+" %";
-    }});
-    await worker.setParameters({tessedit_pageseg_mode:$("mode").value==="filter"?"11":"3"});
-    const raw=(await worker.recognize(img)).data.text.trim();
-    $("rawOut").value=raw;
-    const mode=$("mode").value;
-    if(mode==="all"){$("ocrOut").value=raw;$("skipOut").value="";$("status").textContent=raw?"Fertig.":"Kein Text.";}
-    else{
-      const r=mode==="names"?extractNames(raw):filterLines(raw);
-      $("ocrOut").value=r.names.join("\n");$("skipOut").value=r.skipped.join("\n");
-      $("status").textContent=r.names.length?r.names.length+" Einträge":"Nichts gefunden.";
-    }
+    const img=await prep(ocrFile);
+    w=await Tesseract.createWorker($("lang").value,1,{logger:m=>{if(m.status==="recognizing text")$("status").textContent=Math.round(m.progress*100)+" %";}});
+    await w.setParameters({tessedit_pageseg_mode:$("mode").value==="all"?"3":"6"});
+    render((await w.recognize(img)).data.text.trim());
   }catch(err){$("status").textContent="Fehler: "+err.message;}
-  if(worker)await worker.terminate();
+  if(w)await w.terminate();
   $("ocrBtn").disabled=false;
-});
+}
+$("ocrBtn").addEventListener("click",run);
+["fDedup","fUnique","fSort","fShort","optFlip"].forEach(id=>$(id).addEventListener("change",()=>{if($("rawOut").value)render($("rawOut").value);}));
+$("mode").addEventListener("change",()=>{if($("rawOut").value)render($("rawOut").value);});
+
+$("fullBtn").addEventListener("click",()=>{const f=$("outCard").classList.toggle("full");$("fullBtn").textContent=f?"Schließen":"Vollbild";});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("outCard").classList.contains("full"))$("fullBtn").click();});
 $("copyOcr").addEventListener("click",()=>copyText($("ocrOut").value,$("status")));
 $("saveOcr").addEventListener("click",()=>{
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(new Blob([$("ocrOut").value],{type:"text/plain;charset=utf-8"}));
-  a.download="text.txt";a.click();URL.revokeObjectURL(a.href);
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([$("ocrOut").value],{type:"text/plain;charset=utf-8"}));
+  a.download="liste.txt";a.click();URL.revokeObjectURL(a.href);
 });
-$("toCmp").addEventListener("click",()=>{
-  const t=$("ocrOut").value;
-  if(!$("cmpA").value.trim())$("cmpA").value=t;else $("cmpB").value=t;
-  showTab("tabCmp");
-});
+$("toCmp").addEventListener("click",()=>{const t=$("ocrOut").value;if(!$("cmpA").value.trim())$("cmpA").value=t;else $("cmpB").value=t;showTab("tabCmp");});
 
+// ---- Vergleich
 $("cmpBtn").addEventListener("click",()=>{
   const parse=t=>{const m=new Map();t.split(/\r?\n/).forEach(l=>{l=l.trim();if(l&&!m.has(l.toLowerCase()))m.set(l.toLowerCase(),l);});return m;};
   const A=parse($("cmpA").value),B=parse($("cmpB").value),oa=[],ob=[],bo=[];
-  A.forEach((v,k)=>B.has(k)?bo.push(v):oa.push(v));
-  B.forEach((v,k)=>{if(!A.has(k))ob.push(v);});
+  A.forEach((v,k)=>B.has(k)?bo.push(v):oa.push(v));B.forEach((v,k)=>{if(!A.has(k))ob.push(v);});
   $("onlyA").value=oa.join("\n");$("onlyB").value=ob.join("\n");$("both").value=bo.join("\n");
   $("cmpInfo").textContent="Nur A "+oa.length+" · Nur B "+ob.length+" · Beide "+bo.length;
 });
 
+// ---- Text-Duplikate
 $("dedupBtn").addEventListener("click",()=>{
   const lines=$("dedupIn").value.split(/\r?\n/),seen=new Set(),out=[];
   for(const raw of lines){
@@ -292,6 +328,7 @@ $("dedupBtn").addEventListener("click",()=>{
 });
 $("copyDedup").addEventListener("click",()=>copyText($("dedupOut").value,$("dedupInfo")));
 
+// ---- Datei-Duplikate
 const fmt=b=>b<1024?b+" B":b<1048576?(b/1024).toFixed(1)+" KB":(b/1048576).toFixed(1)+" MB";
 $("files").addEventListener("change",async e=>{
   const files=[...e.target.files],res=$("fileResult");res.textContent="";
@@ -304,86 +341,62 @@ $("files").addEventListener("change",async e=>{
     const hex=[...new Uint8Array(h)].map(b=>b.toString(16).padStart(2,"0")).join("");
     if(!groups.has(hex))groups.set(hex,[]);groups.get(hex).push(f);
   }
-  const dg=[...groups.values()].filter(g=>g.length>1);
-  const n=dg.reduce((a,g)=>a+g.length-1,0);
+  const dg=[...groups.values()].filter(g=>g.length>1),n=dg.reduce((a,g)=>a+g.length-1,0);
   $("fileInfo").textContent=dg.length?n+" Duplikate in "+dg.length+" Gruppen":"Keine Duplikate";
   dg.forEach((g,i)=>{
     const box=document.createElement("div");box.className="group";
     const t=document.createElement("b");t.textContent="Gruppe "+(i+1)+" · "+fmt(g[0].size);box.appendChild(t);
     const ul=document.createElement("ul");ul.style.margin="4px 0 0";
     g.forEach((f,j)=>{const li=document.createElement("li");li.textContent=f.name;
-      if(j===0){const s=document.createElement("span");s.className="keep";s.textContent="  behalten";li.appendChild(s);}
-      ul.appendChild(li);});
+      if(j===0){const s=document.createElement("span");s.className="keep";s.textContent="  behalten";li.appendChild(s);}ul.appendChild(li);});
     box.appendChild(ul);res.appendChild(box);
   });
 });
 
+// ---- Cookie-Demo
 const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
-function renderCmp(acc){
-  const body=$("cmpBody");body.innerHTML="";
-  const add=(a,b,c,ok)=>{const tr=document.createElement("tr");
-    tr.innerHTML="<td>"+a+"</td><td>"+b+'</td><td><span class="pill '+(ok?"yes":"")+'">'+c+"</span></td>";body.appendChild(tr);};
-  add("Basisdaten","sichtbar","sichtbar",true);
-  add("Wiedererkennung","aus",acc?"an":"aus",acc);
-  add("Verhalten messen","aus",acc?"an":"aus",acc);
-  add("Werbung","aus",acc?"erlaubt":"aus",acc);
-  $("cmpTable").hidden=false;
-}
 function cookieChoice(acc){
   $("cookieBanner").hidden=true;
-  const info={"Browser":navigator.userAgent,"Bildschirm":screen.width+" × "+screen.height,"Zeitzone":Intl.DateTimeFormat().resolvedOptions().timeZone,"Sprache":navigator.language};
-  const lines=Object.entries(info).map(([k,v])=>k+": "+v);
+  const lines=Object.entries({"Browser":navigator.userAgent,"Bildschirm":screen.width+" × "+screen.height,"Zeitzone":Intl.DateTimeFormat().resolvedOptions().timeZone,"Sprache":navigator.language}).map(([k,v])=>k+": "+v);
   if(acc){
-    let id=localStorage.getItem("demoId");
-    if(!id){id=Math.random().toString(36).slice(2,10);localStorage.setItem("demoId",id);}
+    let id=localStorage.getItem("demoId");if(!id){id=Math.random().toString(36).slice(2,10);localStorage.setItem("demoId",id);}
     const v=parseInt(localStorage.getItem("demoVisits")||"0",10)+1;localStorage.setItem("demoVisits",String(v));
     lines.push("---","Kennung: "+id,"Aufrufe: "+v,"Klicks und Verweildauer: möglich");
-    $("cookieStatus").textContent="Akzeptiert.";
-  }else{
-    lines.push("---","Keine Kennung, kein Tracking.");
-    $("cookieStatus").textContent="Abgelehnt.";
-  }
+  }else lines.push("---","Keine Kennung, kein Tracking.");
+  $("cookieStatus").textContent=acc?"Akzeptiert.":"Abgelehnt.";
   $("cookieLog").innerHTML=lines.map(l=>'<span class="'+(acc?"ok":"no")+'">'+(acc?"✓ ":"— ")+esc(l)+"</span>").join("\n");
-  renderCmp(acc);
+  const rows=[["Basisdaten","sichtbar","sichtbar"],["Wiedererkennung","aus",acc?"an":"aus"],["Verhalten messen","aus",acc?"an":"aus"],["Werbung","aus",acc?"erlaubt":"aus"]];
+  $("cmpBody").innerHTML=rows.map(r=>"<tr><td>"+r[0]+"</td><td>"+r[1]+"</td><td>"+r[2]+"</td></tr>").join("");
+  $("cmpTable").hidden=false;
 }
 $("btnAccept").addEventListener("click",()=>cookieChoice(true));
 $("btnDecline").addEventListener("click",()=>cookieChoice(false));
 $("btnReset").addEventListener("click",()=>{
   localStorage.removeItem("demoId");localStorage.removeItem("demoVisits");
-  $("cookieBanner").hidden=false;$("cookieStatus").textContent="";
-  $("cookieLog").textContent="–";$("cmpTable").hidden=true;
+  $("cookieBanner").hidden=false;$("cookieStatus").textContent="";$("cookieLog").textContent="–";$("cmpTable").hidden=true;
 });
 
-function checkRiddle(){
-  if($("riddleIn").value.trim()==="6767"){$("riddleBox").hidden=true;$("gameWrap").hidden=false;}
-  else $("riddleStatus").textContent="Falsch.";
-}
+// ---- Rätsel + Game
+function checkRiddle(){if($("riddleIn").value.trim()==="6767"){$("riddleBox").hidden=true;$("gameWrap").hidden=false;}else $("riddleStatus").textContent="Falsch.";}
 $("riddleBtn").addEventListener("click",checkRiddle);
 $("riddleIn").addEventListener("keydown",e=>{if(e.key==="Enter")checkRiddle();});
-
 (()=>{
-  const cv=$("gameCanvas"),ctx=cv.getContext("2d"),W=cv.width,H=cv.height;
-  const p={w:34,h:18,x:W/2-17,y:H-34,s:6};
+  const cv=$("gameCanvas"),ctx=cv.getContext("2d"),W=cv.width,H=cv.height,p={w:34,h:18,x:W/2-17,y:H-34,s:6};
   let blocks=[],run=false,score=0,spawn=0,raf=null,k={l:false,r:false};
   let best=parseInt(localStorage.getItem("gameBest")||"0",10);$("gameBest").textContent=best;
   const hit=(a,b)=>a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
   function step(){
     if(!run)return;
-    if(k.l)p.x-=p.s;if(k.r)p.x+=p.s;
-    p.x=Math.max(0,Math.min(W-p.w,p.x));
+    if(k.l)p.x-=p.s;if(k.r)p.x+=p.s;p.x=Math.max(0,Math.min(W-p.w,p.x));
     if(++spawn>=Math.max(18,40-Math.floor(score/30))){spawn=0;const w=24+Math.random()*40;blocks.push({x:Math.random()*(W-w),y:-20,w,h:20,vy:2+Math.random()*1.5});}
-    const m=1+score/600;
-    blocks.forEach(b=>b.y+=b.vy*m);
-    blocks=blocks.filter(b=>b.y<H+30);
+    const m=1+score/600;blocks.forEach(b=>b.y+=b.vy*m);blocks=blocks.filter(b=>b.y<H+30);
     if(blocks.some(b=>hit(p,b))){end();return;}
     score++;$("gameScore").textContent=Math.floor(score/6);
     ctx.clearRect(0,0,W,H);ctx.fillStyle="#409cff";ctx.fillRect(p.x,p.y,p.w,p.h);
-    ctx.fillStyle="#ff6961";blocks.forEach(b=>ctx.fillRect(b.x,b.y,b.w,b.h));
-    raf=requestAnimationFrame(step);
+    ctx.fillStyle="#ff6961";blocks.forEach(b=>ctx.fillRect(b.x,b.y,b.w,b.h));raf=requestAnimationFrame(step);
   }
   function end(){
-    run=false;cancelAnimationFrame(raf);
-    const f=Math.floor(score/6);
+    run=false;cancelAnimationFrame(raf);const f=Math.floor(score/6);
     if(f>best){best=f;localStorage.setItem("gameBest",String(best));$("gameBest").textContent=best;}
     ctx.fillStyle="rgba(0,0,0,.6)";ctx.fillRect(0,0,W,H);ctx.fillStyle="#fff";ctx.textAlign="center";
     ctx.font="bold 22px system-ui";ctx.fillText("Game Over · "+f,W/2,H/2);
