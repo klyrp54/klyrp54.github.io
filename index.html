@@ -82,7 +82,7 @@ table.cmp th{color:var(--muted);font-weight:500}
 <button data-tab="tabText">Text-Duplikate</button>
 <button data-tab="tabFiles">Dateien</button>
 <button data-tab="tabCookie">Cookies</button>
-<button data-tab="tabGame">Rätsel</button>
+<button data-tab="tabGame">Info</button>
 </nav>
 
 <section class="tab" id="tabOcr">
@@ -173,10 +173,9 @@ table.cmp th{color:var(--muted);font-weight:500}
 
 <section class="tab card" id="tabGame" hidden>
 <div id="riddleBox">
-<b>🍎 Rätsel</b>
-<p class="status">Äpfel in 4 Reihen: 6, 7, 6, 7. Zahlen hintereinander schreiben, nicht addieren.</p>
-<input type="text" id="riddleIn" inputmode="numeric" placeholder="????">
-<div class="row"><button class="btn" id="riddleBtn">Prüfen</button></div>
+<b>Zugang</b>
+<input type="password" id="riddleIn" inputmode="numeric" autocomplete="off" placeholder="Passwort" style="margin-top:12px">
+<div class="row"><button class="btn" id="riddleBtn">Öffnen</button></div>
 <div class="status" id="riddleStatus"></div>
 </div>
 <div id="gameWrap" hidden>
@@ -187,10 +186,12 @@ table.cmp th{color:var(--muted);font-weight:500}
 </section>
 </main>
 
+<script data-goatcounter="https://klyrp54.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"></script>
 <script>
 const $=id=>document.getElementById(id);
 function showTab(id){
+  if(id!=="tabGame"){$("riddleBox").hidden=false;$("gameWrap").hidden=true;$("riddleIn").value="";$("riddleStatus").textContent="";}
   document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===id));
   document.querySelectorAll("section.tab").forEach(s=>s.hidden=s.id!==id);
 }
@@ -406,7 +407,10 @@ $("btnReset").addEventListener("click",()=>{
 });
 
 // ---- Rätsel + Game
-function checkRiddle(){if($("riddleIn").value.trim()==="6767"){$("riddleBox").hidden=true;$("gameWrap").hidden=false;}else $("riddleStatus").textContent="Falsch.";}
+function checkRiddle(){
+  if($("riddleIn").value.trim()==="6767"){$("riddleBox").hidden=true;$("gameWrap").hidden=false;$("riddleStatus").textContent="";}
+  else $("riddleStatus").textContent="Falsch.";
+}
 $("riddleBtn").addEventListener("click",checkRiddle);
 $("riddleIn").addEventListener("keydown",e=>{if(e.key==="Enter")checkRiddle();});
 (()=>{
