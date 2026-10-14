@@ -57,6 +57,12 @@ details{margin-top:12px}summary{cursor:pointer;color:var(--accent);font-size:.9r
 table.cmp{width:100%;border-collapse:collapse;margin-top:12px;font-size:.85rem}
 table.cmp th,table.cmp td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--b)}
 table.cmp th{color:var(--muted);font-weight:500}
+.mark{background:var(--g2);border:1px solid var(--b);border-radius:16px;padding:8px 0;max-height:360px;overflow:auto;font:.82rem ui-monospace,Menlo,monospace}
+.ln{display:flex;gap:10px;padding:1px 12px;white-space:pre}
+.ln .no{color:var(--muted);min-width:2.4em;text-align:right;user-select:none}
+.ln.dup{background:rgba(255,69,58,.25);text-decoration:line-through;text-decoration-color:rgba(255,105,97,.9)}
+.ln.first{background:rgba(255,214,10,.17)}
+.legend{font-size:.78rem;color:var(--muted);margin:14px 4px 6px}
 #gameWrap{display:flex;flex-direction:column;align-items:center;gap:10px}
 #gameCanvas{background:rgba(0,0,0,.5);border-radius:20px;max-width:100%;touch-action:none;border:1px solid var(--b)}
 .scoreRow{display:flex;gap:18px}.scoreRow b{color:var(--accent)}
@@ -137,9 +143,14 @@ table.cmp th{color:var(--muted);font-weight:500}
 <label><input type="checkbox" id="optEmpty" checked> Leere weg</label>
 <label><input type="checkbox" id="optSort"> Sortiert</label>
 </div>
-<div class="row"><button class="btn" id="dedupBtn">Entfernen</button><button class="btn secondary" id="copyDedup">Kopieren</button></div>
+<div class="row"><button class="btn" id="dedupBtn">Entfernen</button><button class="btn secondary" id="copyDedup">Ergebnis kopieren</button><button class="btn secondary" id="copyDups">Doppelte kopieren</button></div>
 <div class="status" id="dedupInfo"></div>
-<textarea id="dedupOut" readonly placeholder="Ergebnis" style="min-height:220px"></textarea>
+<div class="grid2">
+<div><label for="dedupOut">Ergebnis</label><textarea id="dedupOut" readonly style="min-height:260px"></textarea></div>
+<div><label for="dupList" id="dupLabel">Doppelt vorhanden</label><textarea id="dupList" readonly style="min-height:260px"></textarea></div>
+</div>
+<div class="legend">Original mit Markierung: gelb = erstes Vorkommen, rot durchgestrichen = doppelt, wird entfernt</div>
+<div class="mark" id="dedupMark"></div>
 </section>
 
 <section class="tab card" id="tabFiles" hidden>
@@ -315,18 +326,36 @@ $("cmpBtn").addEventListener("click",()=>{
 
 // ---- Text-Duplikate
 $("dedupBtn").addEventListener("click",()=>{
-  const lines=$("dedupIn").value.split(/\r?\n/),seen=new Set(),out=[];
-  for(const raw of lines){
-    const line=$("optTrim").checked?raw.trim():raw;
-    if($("optEmpty").checked&&line==="")continue;
-    const k=$("optCase").checked?line.toLowerCase():line;
-    if(seen.has(k))continue;seen.add(k);out.push(line);
-  }
+  const lines=$("dedupIn").value.split(/\r?\n/),trim=$("optTrim").checked,noEmpty=$("optEmpty").checked;
+  const val=l=>trim?l.trim():l,keyOf=l=>$("optCase").checked?val(l).toLowerCase():val(l);
+  const cnt=new Map(),firstText=new Map();
+  lines.forEach(l=>{
+    if(noEmpty&&val(l)==="")return;
+    const k=keyOf(l);cnt.set(k,(cnt.get(k)||0)+1);
+    if(!firstText.has(k))firstText.set(k,val(l));
+  });
+  const seen=new Set(),out=[],mark=$("dedupMark");mark.textContent="";
+  lines.forEach((raw,i)=>{
+    const d=document.createElement("div");d.className="ln";
+    const n=document.createElement("span");n.className="no";n.textContent=i+1;
+    const t=document.createElement("span");t.textContent=raw===""?" ":raw;
+    d.append(n,t);
+    if(!(noEmpty&&val(raw)==="")){
+      const k=keyOf(raw);
+      if(seen.has(k))d.classList.add("dup");
+      else{seen.add(k);out.push(val(raw));if(cnt.get(k)>1)d.classList.add("first");}
+    }
+    mark.appendChild(d);
+  });
+  const dups=[...cnt].filter(([k,c])=>c>1).map(([k,c])=>firstText.get(k)+"  ("+c+"×)");
   if($("optSort").checked)out.sort((a,b)=>a.localeCompare(b,"de"));
   $("dedupOut").value=out.join("\n");
-  $("dedupInfo").textContent=(lines.length-out.length)+" entfernt, "+out.length+" übrig";
+  $("dupList").value=dups.join("\n");
+  $("dupLabel").textContent="Doppelt vorhanden ("+dups.length+")";
+  $("dedupInfo").textContent=(lines.length-out.length)+" Zeilen entfernt, "+out.length+" übrig, "+dups.length+" Einträge kamen mehrfach vor";
 });
 $("copyDedup").addEventListener("click",()=>copyText($("dedupOut").value,$("dedupInfo")));
+$("copyDups").addEventListener("click",()=>copyText($("dupList").value,$("dedupInfo")));
 
 // ---- Datei-Duplikate
 const fmt=b=>b<1024?b+" B":b<1048576?(b/1024).toFixed(1)+" KB":(b/1048576).toFixed(1)+" MB";
